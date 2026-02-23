@@ -3,33 +3,24 @@
 A collection of OpenCode plugins and commands.
 
 ## Installation
-### From GitHub (recommended)
+
+### One-liner (recommended)
 
 ```bash
-npm install -g github:Commit-Software/opencode-plugin-collection
-# or
-bun add -g github:Commit-Software/opencode-plugin-collection
+curl -fsSL https://raw.githubusercontent.com/Commit-Software/opencode-plugin-collection/main/install.sh | bash
 ```
 
-### From npm (when published)
+### Manual install from GitHub
 
 ```bash
-npm install -g opencode-plugin-collection
-# or
-bun add -g opencode-plugin-collection
+git clone https://github.com/Commit-Software/opencode-plugin-collection.git
+cd opencode-plugin-collection
+bun install && bun run build
+mkdir -p ~/.config/opencode/plugins
+cp dist/index.js ~/.config/opencode/plugins/opencode-plugin-collection.js
 ```
 
-## Usage
-
-Add the plugin to your `opencode.json`:
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-plugin-collection"]
-}
-```
-
-This loads all plugins in the collection.
+That's it — opencode automatically loads plugins from `~/.config/opencode/plugins/`.
 
 ## Included Plugins
 

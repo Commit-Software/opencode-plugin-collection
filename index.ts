@@ -76,18 +76,14 @@ const CodeSimplifierPlugin: Plugin = async function () {
  */
 export const PluginCollection: Plugin = async function (ctx) {
   const plugins = [CodeSimplifierPlugin]
-  const results = await Promise.all(plugins.map(function (p) { return p(ctx) }))
+  const results = await Promise.all(plugins.map((p) => p(ctx)))
 
   return {
-    config: async function (config) {
-      await Promise.all(
-        results.map(function (result) { return result.config?.(config) })
-      )
+    config: async (config) => {
+      await Promise.all(results.map((r) => r.config?.(config)))
     },
-    event: async function (input) {
-      await Promise.all(
-        results.map(function (result) { return result.event?.(input) })
-      )
+    event: async (input) => {
+      await Promise.all(results.map((r) => r.event?.(input)))
     },
   }
 }
