@@ -56,28 +56,25 @@ Your goal is to ensure all code meets the highest standards of elegance and main
 /**
  * Plugin that registers the /code-simplifier command.
  */
-const CodeSimplifierPlugin: Plugin = async function () {
-  return {
-    config: async function (config) {
-      config.command ??= {}
-      config.command["code-simplifier"] = {
-        template: CODE_SIMPLIFIER_TEMPLATE,
-        description:
-          "Simplifies and refines code for clarity, consistency, and maintainability while preserving functionality",
-        agent: "build",
-      }
-    },
-  }
-}
+const CodeSimplifierPlugin: Plugin = async () => ({
+  config: async (config) => {
+    config.command ??= {}
+    config.command["code-simplifier"] = {
+      template: CODE_SIMPLIFIER_TEMPLATE,
+      description:
+        "Simplifies and refines code for clarity, consistency, and maintainability while preserving functionality",
+      agent: "build",
+    }
+  },
+})
 
 /**
  * Combined plugin that includes all commands and features.
  * Add more plugins to the combine list as you create them.
  */
-export const PluginCollection: Plugin = async function (ctx) {
+export const PluginCollection: Plugin = async (ctx) => {
   const plugins = [CodeSimplifierPlugin]
   const results = await Promise.all(plugins.map((p) => p(ctx)))
-
   return {
     config: async (config) => {
       await Promise.all(results.map((r) => r.config?.(config)))
