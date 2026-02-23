@@ -53,12 +53,13 @@ Only refine the specified code unless explicitly instructed to review a broader 
 
 Your goal is to ensure all code meets the highest standards of elegance and maintainability while preserving its complete functionality.`
 
-const CodeSimplifierPlugin: Plugin = async (ctx) => {
+/**
+ * Plugin that registers the /code-simplifier command.
+ */
+const CodeSimplifierPlugin: Plugin = async function () {
   return {
-    config: async (config) => {
-      if (!config.command) {
-        config.command = {}
-      }
+    config: async function (config) {
+      config.command ??= {}
       config.command["code-simplifier"] = {
         template: CODE_SIMPLIFIER_TEMPLATE,
         description:
@@ -73,28 +74,22 @@ const CodeSimplifierPlugin: Plugin = async (ctx) => {
  * Combined plugin that includes all commands and features.
  * Add more plugins to the combine list as you create them.
  */
-export const PluginCollection: Plugin = async (ctx) => {
+export const PluginCollection: Plugin = async function (ctx) {
   const plugins = [CodeSimplifierPlugin]
-
-  const results = await Promise.all(plugins.map((p) => p(ctx)))
+  const results = await Promise.all(plugins.map(function (p) { return p(ctx) }))
 
   return {
-    config: async (config) => {
-      for (const result of results) {
-        if (result.config) {
-          await result.config(config)
-        }
-      }
+    config: async function (config) {
+      await Promise.all(
+        results.map(function (result) { return result.config?.(config) })
+      )
     },
-    event: async (input) => {
-      for (const result of results) {
-        if (result.event) {
-          await result.event(input)
-        }
-      }
+    event: async function (input) {
+      await Promise.all(
+        results.map(function (result) { return result.event?.(input) })
+      )
     },
   }
 }
-
 export { CodeSimplifierPlugin }
 export default PluginCollection
