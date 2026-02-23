@@ -3,6 +3,15 @@
 A collection of OpenCode plugins and commands.
 
 ## Installation
+### From GitHub (recommended)
+
+```bash
+npm install -g github:Commit-Software/opencode-plugin-collection
+# or
+bun add -g github:Commit-Software/opencode-plugin-collection
+```
+
+### From npm (when published)
 
 ```bash
 npm install -g opencode-plugin-collection
